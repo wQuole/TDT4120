@@ -1,54 +1,55 @@
-#!/usr/bin/python3
-
-from sys import stdin, stderr
-import traceback
-
-
 class Node:
     def __init__(self):
         self.barn = {}
         self.posi = []
 
-
 def bygg(ordliste):
-    toppnode = Node()
-    for (ord,posisjon) in ordliste:
-        node = toppnode
-        for char in ord:
-            if not char in node.barn:
+    rot = Node()
+    for (word,pos) in ordliste:
+        node = rot
+        for char in word:
+            if char in node.barn:
+                node = node.barn[char]
+            else:
                 node.barn[char] = Node()
-            node.posi.append(posisjon)
-        return toppnode
+                node = node.barn[char]
+        node.posi.append(pos)
+    return rot
 
-def posisjoner(ord, indeks, node):
-    return
-
+def posisjoner(word,indeks,node,length):
+    char = word[indeks]
+    if char in node.barn:
+        if indeks == length:
+            return node.barn[char].posi
+        return posisjoner(word, indeks +1, node.barn[char], length)
+    elif char == '?':
+        liste = []
+        for k in node.barn.values():
+            if indeks == length:
+                liste += k.posi
+            else:
+                liste += (posisjoner(word, indeks + 1, k, length))
+        return liste
+    else:
+        return []
 
 def main():
-    try:
-        ord = stdin.readline().split()
-        print("Ord:",ord)
-        ordliste = []
-        pos = 0
-        for o in ord:
-            ordliste.append((o, pos))
-            print("Ordliste:",ordliste)
-            pos += len(o) + 1
-            print("Pos:",pos)
-        toppnode = bygg(ordliste)
-        for sokeord in stdin:
-            sokeord = sokeord.strip()
-            print("Sokeord: ",sokeord)
-            print("%s:" % sokeord, end='')
-            #posi = posisjoner(sokeord, 0, toppnode)
-            #posi.sort()
-            #for p in posi:
-            #    print(" %s" % p, end='')
-            print()
-    except:
-        traceback.print_exc(file=stderr)
+    from sys import stdin
+    word = stdin.readline().split()
+    ordliste = []
+    pos = 0
+    for o in word:
+        ordliste.append((o, pos))
+        pos += len(o) + 1
+    toppnode = bygg(ordliste)
+    for sokeord in stdin:
+        sokeord = sokeord.strip()
+        print("%s:" % sokeord, end='')
+        length = len(sokeord) - 1
+        posi = posisjoner(sokeord, 0, toppnode, length)
+        posi.sort()
+        for p in posi:
+            print(" %s" % p, end='')
+        print()
 
-
-if __name__ == "__main__":
-    main()
-
+main()

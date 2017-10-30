@@ -1,5 +1,7 @@
 # kok www.github.com/oddaspa
 from sys import stdin
+#stdin = open("input.txt")
+
 Inf = float(1e3000)
 
 def mst(nm):
@@ -7,19 +9,19 @@ def mst(nm):
     if len(nm) == 1:
         smallest_edges = nm
 
-    # Inintialize first step
+    # (1) Inintialize first step
     # array to keep track of weights of the edges we choose to keep
     smallest_edges = []
 
     # append first node to visited list
     visited_list = [0]
-
     # while we still have unvisited nodes
     while not len(visited_list) == len(nm):
         # set minimum weight to Inf for each iteration
         min_weight = Inf
         # lets find the smallest edge
         for nodes in visited_list:
+
         # we scan through all nodes that we already visited
             for neighbour_node,edge_weight in nm[nodes]:
                 # go through all edges in a visited node
@@ -30,7 +32,9 @@ def mst(nm):
             # we append the min node with the corresponding min edge
         visited_list.append(next_node)
         smallest_edges.append(min_weight)
+
     return max(smallest_edges)
+
 
 lines = []
 for str in stdin:

@@ -1,5 +1,5 @@
 # kok www.github.com/oddaspa
-# from sys import stdin
+from sys import stdin
 Inf = float(1e3000)
 
 def mst(nm):
